@@ -1,6 +1,6 @@
 import App from '../App';
 import { AuthScreen } from '../components/AuthScreen';
-import { useAuth } from './AuthContext';
+import { useAuth } from './useAuth';
 
 export function AuthGate() {
   const { user, loading } = useAuth();

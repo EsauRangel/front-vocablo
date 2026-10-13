@@ -67,12 +67,15 @@ export const authToken = {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const isForm = init?.body instanceof FormData;
   const token = authToken.get();
-  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+  const headers = new Headers(init?.headers);
+  if (!isForm && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+
   const res = await fetch(`${API_URL}${path}`, {
     ...init,
-    headers: isForm
-      ? { ...authHeaders, ...init?.headers }
-      : { 'Content-Type': 'application/json', ...authHeaders, ...init?.headers },
+    headers,
   });
   if (!res.ok) {
     let message = `Error ${res.status}`;
