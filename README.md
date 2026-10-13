@@ -1,27 +1,16 @@
-# React + TypeScript + Vite
+# Vocablo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend de Vocablo, creado con React, TypeScript y Vite.
 
-Currently, two official plugins are available:
+## Ejecutar con Docker
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Construye la imagen y define la URL del API que el navegador podrá alcanzar:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+```sh
+docker build --build-arg VITE_API_URL=http://localhost:3000 -t front-cogni .
+docker run --rm -p 8080:8080 front-cogni
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Abre <http://localhost:8080>. `VITE_API_URL` se incorpora durante el build; usa la URL pública o accesible desde el navegador para tu backend. Si no se especifica, el frontend conserva su valor predeterminado `http://localhost:3000`.
+
+La imagen sirve la compilación de producción con Nginx sin privilegios y escucha en el puerto `8080`.
