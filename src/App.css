@@ -6,9 +6,16 @@
 
 .app-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
   margin-bottom: 24px;
+}
+
+.app-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
 }
 
 .app-header h1 {
@@ -24,6 +31,21 @@ h3 {
 
 .muted {
   color: #6b7280;
+}
+
+.user-menu {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.user-menu span {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
 }
 
 .hint {
@@ -317,4 +339,109 @@ input:focus {
 .study-done {
   text-align: center;
   padding: 48px 0;
+}
+
+/* Autenticación */
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.auth-card {
+  width: min(100%, 430px);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.auth-brand {
+  text-align: center;
+  padding: 28px 24px 20px;
+}
+
+.auth-brand h1 {
+  color: #2563eb;
+  margin: 0;
+}
+
+.auth-brand p {
+  margin: 4px 0 0;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-block: 1px solid #e5e7eb;
+}
+
+.auth-tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: #f9fafb;
+  padding: 12px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.auth-tabs button.active {
+  border-bottom-color: #2563eb;
+  background: #fff;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.auth-form {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+}
+
+.auth-form h2 {
+  margin: 0;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.auth-form label .muted {
+  font-weight: 400;
+}
+
+.auth-form input {
+  width: 100%;
+}
+
+.auth-submit {
+  width: 100%;
+  padding-block: 10px;
+}
+
+.auth-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  .app-header,
+  .app-brand {
+    align-items: flex-start;
+  }
+
+  .app-brand {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .user-menu span {
+    max-width: 130px;
+  }
 }

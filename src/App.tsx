@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { DeckDetail } from './components/DeckDetail';
 import { DeckList } from './components/DeckList';
 import { StudySession } from './components/StudySession';
+import { UserMenu } from './components/UserMenu';
 import './App.css';
 
 type View = { name: 'decks' } | { name: 'deck'; deckId: string } | { name: 'study'; deckId: string };
@@ -12,8 +13,11 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1 onClick={() => setView({ name: 'decks' })}>Vocablo</h1>
-        <span className="muted">Aprende vocabulario con repetición espaciada</span>
+        <div className="app-brand">
+          <h1 onClick={() => setView({ name: 'decks' })}>Vocablo</h1>
+          <span className="muted">Aprende vocabulario con repetición espaciada</span>
+        </div>
+        <UserMenu />
       </header>
       <main>
         {view.name === 'decks' && (

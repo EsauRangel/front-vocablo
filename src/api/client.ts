@@ -28,6 +28,18 @@ export interface DeckSummary {
   updatedAt: string;
 }
 
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  createdAt: string;
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  user: User;
+}
+
 export const LEVEL_LABELS: Record<CardLevel, string> = {
   new: 'Nueva',
   again: 'Otra vez',
@@ -44,12 +56,23 @@ export const RATING_OPTIONS: { rating: ReviewRating; label: string; interval: st
 ];
 
 const API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:3000';
+const TOKEN_KEY = 'cogni.token';
+
+export const authToken = {
+  get: () => localStorage.getItem(TOKEN_KEY),
+  set: (token: string) => localStorage.setItem(TOKEN_KEY, token),
+  clear: () => localStorage.removeItem(TOKEN_KEY),
+};
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const isForm = init?.body instanceof FormData;
+  const token = authToken.get();
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
   const res = await fetch(`${API_URL}${path}`, {
     ...init,
-    headers: isForm ? init?.headers : { 'Content-Type': 'application/json', ...init?.headers },
+    headers: isForm
+      ? { ...authHeaders, ...init?.headers }
+      : { 'Content-Type': 'application/json', ...authHeaders, ...init?.headers },
   });
   if (!res.ok) {
     let message = `Error ${res.status}`;
@@ -59,6 +82,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       message = [msg, ...(body.errors ?? [])].filter(Boolean).join('\n') || message;
     } catch {
       /* respuesta sin cuerpo JSON */
+    }
+    if (res.status === 401) {
+      authToken.clear();
+      window.dispatchEvent(new Event('auth:logout'));
     }
     throw new Error(message);
   }
@@ -74,6 +101,14 @@ function upload(path: string, file: File) {
 }
 
 export const api = {
+  auth: {
+    register: (email: string, password: string, name?: string) =>
+      request<AuthResponse>('/auth/register', json('POST', { email, password, name })),
+    login: (email: string, password: string) =>
+      request<AuthResponse>('/auth/login', json('POST', { email, password })),
+    me: () => request<User>('/auth/me'),
+  },
+
   listDecks: () => request<DeckSummary[]>('/decks'),
   getDeck: (id: string) => request<Deck>(`/decks/${id}`),
   createDeck: (title: string) => request<Deck>('/decks', json('POST', { title })),
